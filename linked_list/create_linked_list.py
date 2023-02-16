@@ -17,7 +17,7 @@ class LinkedList:
         else:
             self.tail.next = new_node
             self.tail = new_node
-            self.length += 1
+        self.length += 1
         return True
 
     def pop(self):
@@ -28,7 +28,7 @@ class LinkedList:
             self.head = None
             self.tail = None
             self.length -= 1
-            return temp.value
+            return temp
         else:
             temp = self.head
             pre = self.head
@@ -38,7 +38,7 @@ class LinkedList:
             self.tail = pre
             self.tail.next = None
             self.length -= 1
-            return temp.value
+            return temp
 
     def prepend(self, value):
         new_node = Node(value)
@@ -86,12 +86,52 @@ class LinkedList:
         return False
 
     def insert(self, index, value):
+        if index > self.length or index < 0:
+            return False
+        if index == 0:
+            return self.prepend(value)
+        if index == self.length:
+            return self.append(value)
         new_node = Node(value)
-        pre = self.get(index-1)
-        post = self.get(index)
-        pre.next = new_node
-        new_node.next = post
+        temp = self.get(index-1)
+        new_node.next = temp.next
+        temp.next = new_node
+        self.length += 1
         return True
+
+    def remove(self, index):
+        if index >= self.length or index < 0:
+            return None
+        if index == 0:
+            return self.pop_first()
+        if index == self.length - 1:
+            return self.pop()
+        prev = self.get(index - 1)
+        temp = prev.next
+        prev.next = temp.next
+        temp.next = None
+        self.length -= 1
+        return temp
+
+    def reverse(self):
+        temp = self.head
+        before = None
+        after = temp.next
+        self.head = self.tail
+        self.tail = temp
+        for _ in range(self.length):
+            after = temp.next
+            temp.next = before
+            before = temp
+            temp = after
+
+    def find_middle_node(self):
+        fast = self.head
+        slow = self.head
+        while fast and fast.next:
+            slow = slow.next
+            fast = fast.next.next
+        return slow
 
     def print_list(self):
         temp = self.head
@@ -105,5 +145,5 @@ my_linked_list.append(3)
 my_linked_list.append(23)
 my_linked_list.append(7)
 
-print(my_linked_list.insert(2,1))
+print(my_linked_list.find_middle_node().value)
 my_linked_list.print_list()
