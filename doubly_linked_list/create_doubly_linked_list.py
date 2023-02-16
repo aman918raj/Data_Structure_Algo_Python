@@ -80,7 +80,8 @@ class DoublyLinkedList:
         temp = self.get(index)
         if temp:
             temp.value = value
-        return True
+            return True
+        return False
 
     def print_list(self):
         temp = self.head
