@@ -83,6 +83,39 @@ class DoublyLinkedList:
             return True
         return False
 
+    def insert(self, index, value):
+        new_node = Node(value)
+        if index > self.length or index < 0:
+            return False
+        if index == 0:
+            return self.prepend(value)
+        if index == self.length:
+            return self.append(value)
+
+        before = self.get(index-1)
+        after = before.next
+        before.next = new_node
+        new_node.prev = before
+        new_node.next = after
+        after.prev = new_node
+        self.length += 1
+        return True
+
+    def remove(self, index):
+        if index < 0 or index >= self.length:
+            return None
+        if index == 0:
+            return self.pop_first()
+        if index == self.length - 1:
+            return self.pop()
+        temp = self.get(index)
+        temp.next.prev = temp.prev
+        temp.prev.next = temp.next
+        temp.prev = None
+        temp.next = None
+        self.length -= 1
+        return temp
+
     def print_list(self):
         temp = self.head
         while temp is not None:
@@ -94,5 +127,6 @@ my_linked_list.append(3)
 my_linked_list.append(23)
 my_linked_list.append(7)
 
+print(my_linked_list.remove(2).value)
 my_linked_list.print_list()
-print(my_linked_list.get(2).value)
+
